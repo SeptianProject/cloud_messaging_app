@@ -1,6 +1,7 @@
 import 'package:fcm_app/firebase_options.dart';
 import 'package:fcm_app/pages/auth/login_page.dart';
 import 'package:fcm_app/pages/home_page.dart';
+import 'package:fcm_app/pages/profile_page.dart';
 import 'package:fcm_app/pages/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -15,13 +16,6 @@ void main() async {
     url: 'https://dftdyuehfbsambrhyzkn.supabase.co',
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRmdGR5dWVoZmJzYW1icmh5emtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc0ODU3MjQsImV4cCI6MjA0MzA2MTcyNH0.a6iyd3fyi9FOyP9kjxVuXxA0V79okpJ4Kml97D5QLYU',
-    // authOptions: const FlutterAuthClientOptions(
-    //   authFlowType: AuthFlowType.pkce,
-    // ),
-    // realtimeClientOptions: const RealtimeClientOptions(
-    //   logLevel: RealtimeLogLevel.info,
-    // ),
-    // storageOptions: const StorageClientOptions(retryAttempts: 10),
   );
 
   runApp(const MyApp());
@@ -42,6 +36,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => const SplashScreen(),
           '/login': (context) => const LoginPage(),
           '/home': (context) => const HomePage(),
+          '/profile': (context) => const ProfilePage(),
         });
   }
 }

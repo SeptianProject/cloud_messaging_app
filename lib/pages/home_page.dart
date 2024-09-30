@@ -1,5 +1,7 @@
 import 'package:fcm_app/main.dart';
+import 'package:fcm_app/pages/profile_page.dart';
 import 'package:fcm_app/services/notification_service.dart';
+import 'package:fcm_app/widgets/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,8 +12,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _future = supabase.from('countries').select();
+  // final _future = supabase.from('countries').select();
   final NotificationService _notficationService = NotificationService();
+  final _future = supabase.from('countries').select();
 
   @override
   void initState() {
@@ -22,7 +25,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
         centerTitle: true,
         title: const Text('Home'),
       ),
@@ -50,6 +56,14 @@ class _HomePageState extends State<HomePage> {
           handleShowNotification();
         },
         child: const Icon(Icons.add),
+      ),
+      bottomNavigationBar: BottomNavbar(
+        onFirst: () {
+          Navigator.pushNamed(context, '/home');
+        },
+        onSecond: () {
+          Navigator.pushNamed(context, '/profile');
+        },
       ),
     );
   }
