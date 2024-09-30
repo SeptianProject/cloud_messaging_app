@@ -1,37 +1,47 @@
 import 'package:fcm_app/firebase_options.dart';
+import 'package:fcm_app/pages/auth/login_page.dart';
 import 'package:fcm_app/pages/home_page.dart';
-import 'package:fcm_app/services/notification_service.dart';
+import 'package:fcm_app/pages/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  if (await Permission.notification.request().isGranted) {
-    await NotificationService().initNotifications();
-    await NotificationService().getToken();
-  }
+  await Supabase.initialize(
+    url: 'https://dftdyuehfbsambrhyzkn.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRmdGR5dWVoZmJzYW1icmh5emtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc0ODU3MjQsImV4cCI6MjA0MzA2MTcyNH0.a6iyd3fyi9FOyP9kjxVuXxA0V79okpJ4Kml97D5QLYU',
+    // authOptions: const FlutterAuthClientOptions(
+    //   authFlowType: AuthFlowType.pkce,
+    // ),
+    // realtimeClientOptions: const RealtimeClientOptions(
+    //   logLevel: RealtimeLogLevel.info,
+    // ),
+    // storageOptions: const StorageClientOptions(retryAttempts: 10),
+  );
 
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+final supabase = Supabase.instance.client;
+
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: GoogleFonts.poppins().fontFamily),
-      home: const HomePage(),
-    );
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(fontFamily: GoogleFonts.poppins().fontFamily),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const SplashScreen(),
+          '/login': (context) => const LoginPage(),
+          '/home': (context) => const HomePage(),
+        });
   }
 }

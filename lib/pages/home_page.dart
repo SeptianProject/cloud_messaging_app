@@ -1,3 +1,4 @@
+import 'package:fcm_app/main.dart';
 import 'package:fcm_app/services/notification_service.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _future = supabase.from('countries').select();
   final NotificationService _notficationService = NotificationService();
 
   @override
@@ -21,17 +23,30 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Page'),
+        centerTitle: true,
+        title: const Text('Home'),
       ),
-      body: const Center(
-        child: Column(
-          children: [
-            Text('Home Page'),
-          ],
-        ),
-      ),
+      body: FutureBuilder(
+          future: _future,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            final countries = snapshot.data!;
+            return Expanded(
+              child: ListView.builder(
+                  padding: const EdgeInsets.all(20),
+                  itemCount: countries.length,
+                  itemBuilder: ((context, index) {
+                    final country = countries[index];
+                    return ListTile(
+                      title: Text(country['name']),
+                    );
+                  })),
+            );
+          }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
+        onPressed: () {
           handleShowNotification();
         },
         child: const Icon(Icons.add),
@@ -39,7 +54,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void handleShowNotification() async {
+  void handleShowNotification() {
     _notficationService.showFlutterNotification(
       title: 'Halo Brody',
       body: 'Assalamualaikum',
