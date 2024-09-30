@@ -1,16 +1,29 @@
-allprojects {
+buildscript {
+    ext.kotlin_version = '1.9.22' // Pastikan ini sesuai dengan versi yang Anda tentukan di atas
     repositories {
         google()
         mavenCentral()
     }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.0' // Sesuaikan dengan versi terbaru yang kompatibel
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.3.15' // Pastikan ini ada untuk Firebase
+    }
 }
 
-rootProject.buildDir = "../build"
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter() 
+    }
+}
+
+rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
-    project.evaluationDependsOn(":app")
+    project.evaluationDependsOn(':app')
 }
 
 tasks.register("clean", Delete) {

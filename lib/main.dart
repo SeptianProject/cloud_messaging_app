@@ -1,56 +1,37 @@
 import 'package:fcm_app/firebase_options.dart';
 import 'package:fcm_app/pages/home_page.dart';
-import 'package:fcm_app/pages/notification_page.dart';
+import 'package:fcm_app/services/notification_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-final navigatorKey = GlobalKey<NavigatorState>();
-
-void main(List<String> args) async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // await Supabase.initialize(
-  //   url: 'https://dftdyuehfbsambrhyzkn.supabase.co',
-  //   anonKey:
-  //       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRmdGR5dWVoZmJzYW1icmh5emtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc0ODU3MjQsImV4cCI6MjA0MzA2MTcyNH0.a6iyd3fyi9FOyP9kjxVuXxA0V79okpJ4Kml97D5QLYU',
-  // );
+  if (await Permission.notification.request().isGranted) {
+    await NotificationService().initNotifications();
+    await NotificationService().getToken();
+  }
 
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // return FutureBuilder(
-    //     future: Future.delayed(const Duration(seconds: 3)),
-    //     builder: (context, snapshot) {
-    //       if (snapshot.connectionState == ConnectionState.waiting) {
-    //         return const MaterialApp(
-    //           debugShowCheckedModeBanner: false,
-    //           home: Scaffold(
-    //             body: Center(
-    //               child: CircularProgressIndicator(),
-    //             ),
-    //           ),
-    //         );
-    //       } else {
+  State<MyApp> createState() => _MyAppState();
+}
 
-    //       }
-    //     });
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: GoogleFonts.poppins().fontFamily),
       home: const HomePage(),
-      navigatorKey: navigatorKey,
-      routes: {
-        '/home': (context) => const HomePage(),
-        '/notification_screen': (context) => const NotificationPage(),
-      },
     );
   }
 }

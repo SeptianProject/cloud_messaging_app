@@ -1,3 +1,4 @@
+import 'package:fcm_app/services/notification_service.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,21 +9,40 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final NotificationService _notficationService = NotificationService();
+
+  @override
+  void initState() {
+    super.initState();
+    _notficationService.initNotifications();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Dashboard"),
-        actions: const [],
+        title: const Text('Home Page'),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(20.0),
-          child: const Column(
-            children: [],
-          ),
+      body: const Center(
+        child: Column(
+          children: [
+            Text('Home Page'),
+          ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          handleShowNotification();
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  void handleShowNotification() async {
+    _notficationService.showFlutterNotification(
+      title: 'Halo Brody',
+      body: 'Assalamualaikum',
     );
   }
 }
